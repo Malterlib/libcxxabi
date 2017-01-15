@@ -1280,10 +1280,11 @@ __cxa_call_unexpected(void* arg)
             //   ttypeIndex?
             // If no
             //    throw std::bad_exception();
-            const __shim_type_info* excpType =
-                static_cast<const __shim_type_info*>(&typeid(std::bad_exception));
             std::bad_exception be;
             adjustedPtr = &be;
+#if __has_feature(cxx_rtti)
+            const __shim_type_info* excpType =
+                static_cast<const __shim_type_info*>(&typeid(std::bad_exception));
             if (!exception_spec_can_catch(ttypeIndex, classInfo, ttypeEncoding,
                                           excpType, adjustedPtr, unwind_exception))
             {
@@ -1296,6 +1297,10 @@ __cxa_call_unexpected(void* arg)
                 //   old_exception_header
                 throw be;
             }
+#else
+            __cxa_end_catch();
+            throw be;
+#endif
         }
     }
     std::__terminate(t_handler);

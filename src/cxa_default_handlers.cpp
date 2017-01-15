@@ -40,10 +40,6 @@ static void default_terminate_handler()
                                  (kOurExceptionClass & get_vendor_and_language);
             if (native_exception)
             {
-                void* thrown_object =
-                    unwind_exception->exception_class == kOurDependentExceptionClass ?
-                        ((__cxa_dependent_exception*)exception_header)->primaryException :
-                        exception_header + 1;
                 const __shim_type_info* thrown_type =
                     static_cast<const __shim_type_info*>(exception_header->exceptionType);
                 // Try to get demangled name of thrown_type
@@ -54,6 +50,11 @@ static void default_terminate_handler()
                 if (status != 0)
                     name = thrown_type->name();
                 // If the uncaught exception can be caught with std::exception&
+#if __has_feature(cxx_rtti)
+                void* thrown_object =
+                    unwind_exception->exception_class == kOurDependentExceptionClass ?
+                        ((__cxa_dependent_exception*)exception_header)->primaryException :
+                        exception_header + 1;
                 const __shim_type_info* catch_type =
 				 static_cast<const __shim_type_info*>(&typeid(std::exception));
                 if (catch_type->can_catch(thrown_type, thrown_object))
@@ -64,6 +65,7 @@ static void default_terminate_handler()
                                   cause, name, e->what());
                 }
                 else
+#endif
                     // Else just note that we're terminating with an exception
                     abort_message("terminating with %s exception of type %s",
                                    cause, name);
