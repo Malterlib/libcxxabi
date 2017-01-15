@@ -36,6 +36,13 @@ namespace
 // be statically initialized to 0.
 typedef uint32_t guard_type;
 
+// Test the lowest bit.
+#if defined(__APPLE__)
+inline bool is_initialized(guard_type* guard_object) {
+    return (*guard_object) & 1;
+}
+#endif
+
 inline void set_initialized(guard_type* guard_object) {
     *guard_object |= 1;
 }
@@ -51,17 +58,14 @@ void set_initialized(guard_type* guard_object) {
 #if defined(_LIBCXXABI_HAS_NO_THREADS) || (defined(__APPLE__) && !defined(__arm__))
 #ifdef __arm__
 
-// Test the lowest bit.
-inline bool is_initialized(guard_type* guard_object) {
-    return (*guard_object) & 1;
-}
-
 #else
 
+#if defined(__APPLE__)
 bool is_initialized(guard_type* guard_object) {
     char* initialized = (char*)guard_object;
     return *initialized;
 }
+#endif
 
 #endif
 #endif
@@ -113,6 +117,8 @@ set_lock(uint64_t& x, lock_type y)
 
 typedef bool lock_type;
 
+#if !defined(__arm__)
+
 inline
 lock_type
 get_lock(uint64_t x)
@@ -138,6 +144,8 @@ set_lock(uint64_t& x, lock_type y)
     x = f.guard;
 }
 
+#else
+	
 inline
 lock_type
 get_lock(uint32_t x)
@@ -162,6 +170,8 @@ set_lock(uint32_t& x, lock_type y)
     f.lock[1] = y;
     x = f.guard;
 }
+	
+#endif
 
 #endif  // __APPLE__
 
