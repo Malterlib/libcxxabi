@@ -110,7 +110,9 @@ struct __cxa_eh_globals {
 };
 
 #pragma GCC visibility pop
+#ifndef LIBCXXABI_NODEFAULTVISIBILITY
 #pragma GCC visibility push(default)
+#endif
 
 extern "C" __cxa_eh_globals * __cxa_get_globals      ();
 extern "C" __cxa_eh_globals * __cxa_get_globals_fast ();
@@ -118,7 +120,9 @@ extern "C" __cxa_eh_globals * __cxa_get_globals_fast ();
 extern "C" void * __cxa_allocate_dependent_exception ();
 extern "C" void __cxa_free_dependent_exception (void * dependent_exception);
 
+#ifndef LIBCXXABI_NODEFAULTVISIBILITY
 #pragma GCC visibility pop
+#endif
 
 }  // namespace __cxxabiv1
 

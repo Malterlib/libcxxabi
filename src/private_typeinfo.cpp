@@ -539,7 +539,9 @@ bool __pointer_to_member_type_info::can_catch_nested(
 #endif
 
 #pragma GCC visibility pop
+#ifndef LIBCXXABI_NODEFAULTVISIBILITY
 #pragma GCC visibility push(default)
+#endif
 
 #ifdef __clang__
 #pragma clang diagnostic push
@@ -715,7 +717,9 @@ __dynamic_cast(const void *static_ptr, const __class_type_info *static_type,
 #pragma clang diagnostic pop
 #endif
 
+#ifndef LIBCXXABI_NODEFAULTVISIBILITY
 #pragma GCC visibility pop
+#endif
 #pragma GCC visibility push(hidden)
 
 // Call this function when you hit a static_type which is a base (above) a dst_type.

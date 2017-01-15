@@ -33,7 +33,9 @@
 
 namespace __cxxabiv1 {
 
+#ifndef LIBCXXABI_NODEFAULTVISIBILITY
 #pragma GCC visibility push(default)
+#endif
 
 //  Utility routines
 static
@@ -697,6 +699,8 @@ __cxa_uncaught_exceptions() throw()
 
 }  // extern "C"
 
+#ifndef LIBCXXABI_NODEFAULTVISIBILITY
 #pragma GCC visibility pop
+#endif
 
 }  // abi

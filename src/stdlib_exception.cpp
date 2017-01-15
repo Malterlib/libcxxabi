@@ -9,7 +9,9 @@
 
 #include <exception>
 
+#ifndef LIBCXXABI_NODEFAULTVISIBILITY
 #pragma GCC visibility push(default)
+#endif
 
 namespace std
 {
@@ -38,4 +40,6 @@ const char* bad_exception::what() const _NOEXCEPT
 
 }  // std
 
+#ifndef LIBCXXABI_NODEFAULTVISIBILITY
 #pragma GCC visibility pop
+#endif

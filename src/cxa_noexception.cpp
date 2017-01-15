@@ -22,7 +22,9 @@
 
 namespace __cxxabiv1 {
 
+#ifndef LIBCXXABI_NODEFAULTVISIBILITY
 #pragma GCC visibility push(default)
+#endif
 
 extern "C" {
 
@@ -55,6 +57,8 @@ __cxa_uncaught_exceptions() throw() { return 0; }
 
 }  // extern "C"
 
+#ifndef LIBCXXABI_NODEFAULTVISIBILITY
 #pragma GCC visibility pop
+#endif
 
 }  // abi

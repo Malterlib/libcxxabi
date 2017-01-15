@@ -14,14 +14,18 @@
 namespace __cxxabiv1
 {
 
+#ifndef LIBCXXABI_NODEFAULTVISIBILITY
 #pragma GCC visibility push(default)
+#endif
 
 extern "C"
 {
 
 }
 
+#ifndef LIBCXXABI_NODEFAULTVISIBILITY
 #pragma GCC visibility pop
+#endif
 
 }  // namespace __cxxabiv1
 
