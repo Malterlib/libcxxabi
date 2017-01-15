@@ -36,6 +36,7 @@
 * The loop terminates when an attempt to allocate the requested storage is
   successful or when a called new_handler function does not return.
 */
+#ifndef LIBCXXABI_NO_NEW_DELETE
 __attribute__((__weak__, __visibility__("default")))
 void *
 operator new(std::size_t size) _THROW_BAD_ALLOC
@@ -175,6 +176,7 @@ operator delete[] (void* ptr, const std::nothrow_t&) _NOEXCEPT
 {
     ::operator delete[](ptr);
 }
+#endif
 
 namespace std
 {
