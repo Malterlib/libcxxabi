@@ -1442,13 +1442,13 @@ class BumpPointerAllocator {
   BlockMeta* BlockList = nullptr;
 
   void grow() {
-    char* NewMeta = new char[AllocSize];
+    void* NewMeta = std::malloc(AllocSize);
     BlockList = new (NewMeta) BlockMeta{BlockList, 0};
   }
 
   void* allocateMassive(size_t NBytes) {
     NBytes += sizeof(BlockMeta);
-    BlockMeta* NewMeta = reinterpret_cast<BlockMeta*>(new char[NBytes]);
+    BlockMeta* NewMeta = reinterpret_cast<BlockMeta*>(std::malloc(NBytes));
     BlockList->Next = new (NewMeta) BlockMeta{BlockList->Next, 0};
     return static_cast<void*>(NewMeta + 1);
   }
@@ -1474,7 +1474,7 @@ public:
       BlockMeta* Tmp = BlockList;
       BlockList = BlockList->Next;
       if (reinterpret_cast<char*>(Tmp) != InitialBuffer)
-        delete[] reinterpret_cast<char*>(Tmp);
+        std::free(reinterpret_cast<char*>(Tmp));
     }
   }
 };
